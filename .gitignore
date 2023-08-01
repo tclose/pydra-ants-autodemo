@@ -138,4 +138,4 @@ dmypy.json
 .DS_store
 
 /pydra/tasks/ants/auto
-/pydra/tasks/_version.py
+/pydra/tasks/ants/_version.py
