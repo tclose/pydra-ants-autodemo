@@ -1,0 +1,95 @@
+# This file is used to manually specify the semi-automatic conversion of
+# 'nipype.interfaces.ants.legacy.GenWarpFields' from Nipype to Pydra.
+#
+# Please fill-in/edit the fields below where appropriate
+#
+# Inputs
+# ------
+# dimension : enum
+#    image dimension (2 or 3)
+# reference_image : file
+#    template file to warp to
+# input_image : file
+#    input image to warp to template
+# force_proceed : bool
+#    force script to proceed even if headers may be incompatible
+# inverse_warp_template_labels : bool
+#    Applies inverse warp to the template labels to estimate label positions in target space (use for template-based segmentation)
+# max_iterations : list
+#    maximum number of iterations (must be list of integers in the form [J,K,L...]: J = coarsest resolution iterations, K = middle resolution iterations, L = fine resolution iterations
+# bias_field_correction : bool
+#    Applies bias field correction to moving image
+# similarity_metric : enum
+#    Type of similartiy metric used for registration (CC = cross correlation, MI = mutual information, PR = probability mapping, MSQ = mean square difference)
+# transformation_model : enum
+#    Type of transofmration model used for registration (EL = elastic transformation model, SY = SyN with time, arbitrary number of time points, S2 =  SyN with time optimized for 2 time points, GR = greedy SyN, EX = exponential, DD = diffeomorphic demons style exponential mapping, RI = purely rigid, RA = affine rigid
+# out_prefix : str
+#    Prefix that is prepended to all output files (default = ants_)
+# quality_check : bool
+#    Perform a quality check of the result
+# num_threads : int
+#    Number of ITK threads to use
+# args : str
+#    Additional parameters to the command
+# environ : dict
+#    Environment variables
+#
+# Outputs
+# -------
+# affine_transformation : file
+#    affine (prefix_Affine.txt)
+# warp_field : file
+#    warp field (prefix_Warp.nii)
+# inverse_warp_field : file
+#    inverse warp field (prefix_InverseWarp.nii)
+# input_file : file
+#    input image (prefix_repaired.nii)
+# output_file : file
+#    output image (prefix_deformed.nii)
+#
+# Docs
+# ----
+# 
+task_name: gen_warp_fields
+nipype_name: GenWarpFields
+nipype_module: nipype.interfaces.ants.legacy
+inputs:
+  omit:
+  # list[str] - fields to omit from the Pydra interface
+  rename:
+  # dict[str, str] - fields to rename in the Pydra interface
+  types:
+  # dict[str, type] - override inferred types (use "mime-like" string for file-format types,
+  # e.g. 'medimage/nifti-gz'). For most fields the type will be correctly inferred
+  # from the nipype interface, but you may want to be more specific, particularly
+  # for file types, where specifying the format also specifies the file that will be
+  # passed to the field in the automatically generated unittests.
+    reference_image: generic/file
+    input_image: generic/file
+  metadata:
+  # dict[str, dict[str, any]] - additional metadata to set on any of the input fields (e.g. out_file: position: 1)
+outputs:
+  omit:
+  # list[str] - fields to omit from the Pydra interface
+  rename:
+  # dict[str, str] - fields to rename in the Pydra interface
+  types:
+  # dict[str, type] - override inferred types (use "mime-like" string for file-format types,
+  # e.g. 'medimage/nifti-gz'). For most fields the type will be correctly inferred
+  # from the nipype interface, but you may want to be more specific, particularly
+  # for file types, where specifying the format also specifies the file that will be
+  # passed to the field in the automatically generated unittests.
+    affine_transformation: generic/file
+    warp_field: generic/file
+    inverse_warp_field: generic/file
+    input_file: generic/file
+    output_file: generic/file
+  callables:
+  # dict[str, str] - names of methods/callable classes defined in the adjacent `*_callables.py`
+  # to set to the `callable` attribute of output fields
+  templates:
+  # dict[str, str] - `output_file_template` values to be provided to output fields
+  requirements:
+  # dict[str, list[str]] - input fields that are required to be provided for the output field to be present
+tests: []
+doctests: []

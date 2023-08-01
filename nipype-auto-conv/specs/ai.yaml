@@ -1,0 +1,111 @@
+# This file is used to manually specify the semi-automatic conversion of
+# 'nipype.interfaces.ants.utils.AI' from Nipype to Pydra.
+#
+# Please fill-in/edit the fields below where appropriate
+#
+# Inputs
+# ------
+# dimension : enum
+#    dimension of output image
+# verbose : bool
+#    enable verbosity
+# fixed_image : file
+#    Image to which the moving_image should be transformed
+# moving_image : file
+#    Image that will be transformed to fixed_image
+# fixed_image_mask : file
+#    fixed mage mask
+# moving_image_mask : file
+#    moving mage mask
+# metric : tuple
+#    the metric(s) to use.
+# transform : tuple
+#    Several transform options are available
+# principal_axes : bool
+#    align using principal axes
+# search_factor : tuple
+#    search factor
+# search_grid : traitcompound
+#    Translation search grid in mm
+# convergence : tuple
+#    convergence
+# output_transform : file
+#    output file name
+# num_threads : int
+#    Number of ITK threads to use
+# args : str
+#    Additional parameters to the command
+# environ : dict
+#    Environment variables
+#
+# Outputs
+# -------
+# output_transform : file
+#    output file name
+#
+# Docs
+# ----
+# 
+#     Calculate the optimal linear transform parameters for aligning two images.
+# 
+#     Examples
+#     --------
+#     >>> AI(
+#     ...     fixed_image='structural.nii',
+#     ...     moving_image='epi.nii',
+#     ...     metric=('Mattes', 32, 'Regular', 1),
+#     ... ).cmdline
+#     'antsAI -c [10,1e-06,10] -d 3 -m Mattes[structural.nii,epi.nii,32,Regular,1]
+#     -o initialization.mat -p 0 -s [20,0.12] -t Affine[0.1] -v 0'
+# 
+#     >>> AI(fixed_image='structural.nii',
+#     ...    moving_image='epi.nii',
+#     ...    metric=('Mattes', 32, 'Regular', 1),
+#     ...    search_grid=(12, (1, 1, 1)),
+#     ... ).cmdline
+#     'antsAI -c [10,1e-06,10] -d 3 -m Mattes[structural.nii,epi.nii,32,Regular,1]
+#     -o initialization.mat -p 0 -s [20,0.12] -g [12.0,1x1x1] -t Affine[0.1] -v 0'
+# 
+#     
+task_name: ai
+nipype_name: AI
+nipype_module: nipype.interfaces.ants.utils
+inputs:
+  omit:
+  # list[str] - fields to omit from the Pydra interface
+  rename:
+  # dict[str, str] - fields to rename in the Pydra interface
+  types:
+  # dict[str, type] - override inferred types (use "mime-like" string for file-format types,
+  # e.g. 'medimage/nifti-gz'). For most fields the type will be correctly inferred
+  # from the nipype interface, but you may want to be more specific, particularly
+  # for file types, where specifying the format also specifies the file that will be
+  # passed to the field in the automatically generated unittests.
+    fixed_image: generic/file
+    moving_image: generic/file
+    fixed_image_mask: generic/file
+    moving_image_mask: generic/file
+    output_transform: generic/file
+  metadata:
+  # dict[str, dict[str, any]] - additional metadata to set on any of the input fields (e.g. out_file: position: 1)
+outputs:
+  omit:
+  # list[str] - fields to omit from the Pydra interface
+  rename:
+  # dict[str, str] - fields to rename in the Pydra interface
+  types:
+  # dict[str, type] - override inferred types (use "mime-like" string for file-format types,
+  # e.g. 'medimage/nifti-gz'). For most fields the type will be correctly inferred
+  # from the nipype interface, but you may want to be more specific, particularly
+  # for file types, where specifying the format also specifies the file that will be
+  # passed to the field in the automatically generated unittests.
+    output_transform: generic/file
+  callables:
+  # dict[str, str] - names of methods/callable classes defined in the adjacent `*_callables.py`
+  # to set to the `callable` attribute of output fields
+  templates:
+  # dict[str, str] - `output_file_template` values to be provided to output fields
+  requirements:
+  # dict[str, list[str]] - input fields that are required to be provided for the output field to be present
+tests: []
+doctests: []
