@@ -3,32 +3,6 @@
 #
 # Please fill-in/edit the fields below where appropriate
 #
-# Inputs
-# ------
-# process : enum
-#    What to do with the transform inputs (assemble or disassemble)
-# out_file : file
-#    Output file path (only used for disassembly).
-# in_file : inputmultiobject
-#    Input transform file(s)
-# output_prefix : str
-#    A prefix that is prepended to all output files (only used for assembly).
-# num_threads : int
-#    Number of ITK threads to use
-# args : str
-#    Additional parameters to the command
-# environ : dict
-#    Environment variables
-#
-# Outputs
-# -------
-# affine_transform : file
-#    Affine transform component
-# displacement_field : file
-#    Displacement field component
-# out_file : file
-#    Compound transformation file
-#
 # Docs
 # ----
 # 
@@ -72,7 +46,10 @@ inputs:
   # for file types, where specifying the format also specifies the file that will be
   # passed to the field in the automatically generated unittests.
     out_file: datascience/hdf5
+    # type=file: Compound transformation file
+    # type=file|default=<undefined>: Output file path (only used for disassembly).
     in_file: '[datascience/text-matrix,datascience/hdf5]+list-of'
+    # type=inputmultiobject|default=[]: Input transform file(s)
   metadata:
   # dict[str, dict[str, any]] - additional metadata to set on any of the input fields (e.g. out_file: position: 1)
 outputs:
@@ -87,8 +64,12 @@ outputs:
   # for file types, where specifying the format also specifies the file that will be
   # passed to the field in the automatically generated unittests.
     affine_transform: generic/file
+    # type=file: Affine transform component
     displacement_field: generic/file
+    # type=file: Displacement field component
     out_file: datascience/hdf5
+    # type=file: Compound transformation file
+    # type=file|default=<undefined>: Output file path (only used for disassembly).
   callables:
   # dict[str, str] - names of methods/callable classes defined in the adjacent `*_callables.py`
   # to set to the `callable` attribute of output fields
@@ -100,8 +81,43 @@ tests:
 - inputs:
   # dict[str, str] - values to provide to inputs fields in the task initialisation
   # (if not specified, will try to choose a sensible value)
-    process: '"disassemble"'
+    process:
+    # type=enum|default='assemble'|allowed['assemble','disassemble']: What to do with the transform inputs (assemble or disassemble)
+    out_file:
+    # type=file: Compound transformation file
+    # type=file|default=<undefined>: Output file path (only used for disassembly).
     in_file:
+    # type=inputmultiobject|default=[]: Input transform file(s)
+    output_prefix:
+    # type=str|default='transform': A prefix that is prepended to all output files (only used for assembly).
+    num_threads:
+    # type=int|default=1: Number of ITK threads to use
+    args:
+    # type=str|default='': Additional parameters to the command
+    environ:
+    # type=dict|default={}: Environment variables
+  imports:
+  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # consisting of 'module', 'name', and optionally 'alias' keys
+  expected_outputs:
+  # dict[str, str] - expected values for selected outputs, noting that tests will typically
+  # be terminated before they complete for time-saving reasons, and therefore
+  # these values will be ignored, when running in CI
+  timeout: 10
+  # int - the value to set for the timeout in the generated test, 
+  # after which the test will be considered to have been initialised 
+  # successfully. Set to 0 to disable the timeout (warning, this could
+  # lead to the unittests taking a very long time to complete)
+  xfail: true
+  # bool - whether the unittest is expected to fail or not. Set to false
+  # when you are satisfied with the edits you have made to this file
+- inputs:
+  # dict[str, str] - values to provide to inputs fields in the task initialisation
+  # (if not specified, will try to choose a sensible value)
+    process: '"disassemble"'
+    # type=enum|default='assemble'|allowed['assemble','disassemble']: What to do with the transform inputs (assemble or disassemble)
+    in_file:
+    # type=inputmultiobject|default=[]: Input transform file(s)
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -121,8 +137,12 @@ tests:
   # dict[str, str] - values to provide to inputs fields in the task initialisation
   # (if not specified, will try to choose a sensible value)
     process: '"assemble"'
+    # type=enum|default='assemble'|allowed['assemble','disassemble']: What to do with the transform inputs (assemble or disassemble)
     out_file:
+    # type=file: Compound transformation file
+    # type=file|default=<undefined>: Output file path (only used for disassembly).
     in_file:
+    # type=inputmultiobject|default=[]: Input transform file(s)
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -146,11 +166,13 @@ doctests:
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
     process: '"disassemble"'
+    # type=enum|default='assemble'|allowed['assemble','disassemble']: What to do with the transform inputs (assemble or disassemble)
     in_file:
+    # type=inputmultiobject|default=[]: Input transform file(s)
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
-  directive: ''''
+  directive:
   # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
 - cmdline: 'CompositeTransformUtil --assemble my.h5 AffineTransform.mat DisplacementFieldTransform.nii.gz '
   # str - the expected cmdline output
@@ -159,10 +181,14 @@ doctests:
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
     process: '"assemble"'
+    # type=enum|default='assemble'|allowed['assemble','disassemble']: What to do with the transform inputs (assemble or disassemble)
     out_file:
+    # type=file: Compound transformation file
+    # type=file|default=<undefined>: Output file path (only used for disassembly).
     in_file:
+    # type=inputmultiobject|default=[]: Input transform file(s)
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
-  directive: ''''
+  directive:
   # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS

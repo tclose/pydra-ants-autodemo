@@ -3,38 +3,6 @@
 #
 # Please fill-in/edit the fields below where appropriate
 #
-# Inputs
-# ------
-# dimension : enum
-#    This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.
-# input_image : file
-#    A scalar image is expected as input for noise correction.
-# noise_model : enum
-#    Employ a Rician or Gaussian noise model.
-# shrink_factor : int
-#    Running noise correction on large images can be time consuming. To lessen computation time, the input image can be resampled. The shrink factor, specified as a single integer, describes this resampling. Shrink factor = 1 is the default.
-# output_image : file
-#    The output consists of the noise corrected version of the input image.
-# save_noise : bool
-#    True if the estimated noise should be saved to file.
-# noise_image : file
-#    Filename for the estimated noise.
-# verbose : bool
-#    Verbose output.
-# num_threads : int
-#    Number of ITK threads to use
-# args : str
-#    Additional parameters to the command
-# environ : dict
-#    Environment variables
-#
-# Outputs
-# -------
-# output_image : file
-#    
-# noise_image : file
-#    
-#
 # Docs
 # ----
 # 
@@ -77,8 +45,13 @@ inputs:
   # for file types, where specifying the format also specifies the file that will be
   # passed to the field in the automatically generated unittests.
     input_image: medimage/nifti1
+    # type=file|default=<undefined>: A scalar image is expected as input for noise correction.
     output_image: medimage/nifti-gz
+    # type=file: 
+    # type=file|default=<undefined>: The output consists of the noise corrected version of the input image.
     noise_image: generic/file
+    # type=file: 
+    # type=file|default=<undefined>: Filename for the estimated noise.
   metadata:
   # dict[str, dict[str, any]] - additional metadata to set on any of the input fields (e.g. out_file: position: 1)
 outputs:
@@ -93,7 +66,11 @@ outputs:
   # for file types, where specifying the format also specifies the file that will be
   # passed to the field in the automatically generated unittests.
     output_image: medimage/nifti-gz
+    # type=file: 
+    # type=file|default=<undefined>: The output consists of the noise corrected version of the input image.
     noise_image: generic/file
+    # type=file: 
+    # type=file|default=<undefined>: Filename for the estimated noise.
   callables:
   # dict[str, str] - names of methods/callable classes defined in the adjacent `*_callables.py`
   # to set to the `callable` attribute of output fields
@@ -105,8 +82,52 @@ tests:
 - inputs:
   # dict[str, str] - values to provide to inputs fields in the task initialisation
   # (if not specified, will try to choose a sensible value)
-    dimension: '3'
+    dimension:
+    # type=enum|default=2|allowed[2,3,4]: This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.
     input_image:
+    # type=file|default=<undefined>: A scalar image is expected as input for noise correction.
+    noise_model:
+    # type=enum|default='Gaussian'|allowed['Gaussian','Rician']: Employ a Rician or Gaussian noise model.
+    shrink_factor:
+    # type=int|default=1: Running noise correction on large images can be time consuming. To lessen computation time, the input image can be resampled. The shrink factor, specified as a single integer, describes this resampling. Shrink factor = 1 is the default.
+    output_image:
+    # type=file: 
+    # type=file|default=<undefined>: The output consists of the noise corrected version of the input image.
+    save_noise:
+    # type=bool|default=False: True if the estimated noise should be saved to file.
+    noise_image:
+    # type=file: 
+    # type=file|default=<undefined>: Filename for the estimated noise.
+    verbose:
+    # type=bool|default=False: Verbose output.
+    num_threads:
+    # type=int|default=1: Number of ITK threads to use
+    args:
+    # type=str|default='': Additional parameters to the command
+    environ:
+    # type=dict|default={}: Environment variables
+  imports:
+  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # consisting of 'module', 'name', and optionally 'alias' keys
+  expected_outputs:
+  # dict[str, str] - expected values for selected outputs, noting that tests will typically
+  # be terminated before they complete for time-saving reasons, and therefore
+  # these values will be ignored, when running in CI
+  timeout: 10
+  # int - the value to set for the timeout in the generated test, 
+  # after which the test will be considered to have been initialised 
+  # successfully. Set to 0 to disable the timeout (warning, this could
+  # lead to the unittests taking a very long time to complete)
+  xfail: true
+  # bool - whether the unittest is expected to fail or not. Set to false
+  # when you are satisfied with the edits you have made to this file
+- inputs:
+  # dict[str, str] - values to provide to inputs fields in the task initialisation
+  # (if not specified, will try to choose a sensible value)
+    dimension: '3'
+    # type=enum|default=2|allowed[2,3,4]: This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.
+    input_image:
+    # type=file|default=<undefined>: A scalar image is expected as input for noise correction.
   imports: &id001
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -127,8 +148,12 @@ tests:
   # dict[str, str] - values to provide to inputs fields in the task initialisation
   # (if not specified, will try to choose a sensible value)
     output_image:
+    # type=file: 
+    # type=file|default=<undefined>: The output consists of the noise corrected version of the input image.
     noise_model: '"Rician"'
+    # type=enum|default='Gaussian'|allowed['Gaussian','Rician']: Employ a Rician or Gaussian noise model.
     shrink_factor: '2'
+    # type=int|default=1: Running noise correction on large images can be time consuming. To lessen computation time, the input image can be resampled. The shrink factor, specified as a single integer, describes this resampling. Shrink factor = 1 is the default.
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -148,7 +173,9 @@ tests:
   # dict[str, str] - values to provide to inputs fields in the task initialisation
   # (if not specified, will try to choose a sensible value)
     input_image:
+    # type=file|default=<undefined>: A scalar image is expected as input for noise correction.
     save_noise: 'True'
+    # type=bool|default=False: True if the estimated noise should be saved to file.
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -172,11 +199,13 @@ doctests:
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
     dimension: '3'
+    # type=enum|default=2|allowed[2,3,4]: This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.
     input_image:
+    # type=file|default=<undefined>: A scalar image is expected as input for noise correction.
   imports: *id001
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
-  directive: ''''
+  directive:
   # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
 - cmdline: DenoiseImage -d 3 -i im1.nii -n Rician -o output_corrected_image.nii.gz -s 2
   # str - the expected cmdline output
@@ -185,12 +214,16 @@ doctests:
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
     output_image:
+    # type=file: 
+    # type=file|default=<undefined>: The output consists of the noise corrected version of the input image.
     noise_model: '"Rician"'
+    # type=enum|default='Gaussian'|allowed['Gaussian','Rician']: Employ a Rician or Gaussian noise model.
     shrink_factor: '2'
+    # type=int|default=1: Running noise correction on large images can be time consuming. To lessen computation time, the input image can be resampled. The shrink factor, specified as a single integer, describes this resampling. Shrink factor = 1 is the default.
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
-  directive: ''''
+  directive:
   # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
 - cmdline: DenoiseImage -i im1.nii -n Gaussian -o [ im1_noise_corrected.nii, im1_noise.nii ] -s 1
   # str - the expected cmdline output
@@ -199,9 +232,11 @@ doctests:
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
     input_image:
+    # type=file|default=<undefined>: A scalar image is expected as input for noise correction.
     save_noise: 'True'
+    # type=bool|default=False: True if the estimated noise should be saved to file.
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
-  directive: ''''
+  directive:
   # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS

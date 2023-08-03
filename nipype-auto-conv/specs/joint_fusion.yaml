@@ -3,66 +3,6 @@
 #
 # Please fill-in/edit the fields below where appropriate
 #
-# Inputs
-# ------
-# dimension : enum
-#    This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.
-# target_image : list
-#    The target image (or multimodal target images) assumed to be aligned to a common image domain.
-# atlas_image : list
-#    The atlas image (or multimodal atlas images) assumed to be aligned to a common image domain.
-# atlas_segmentation_image : inputmultiobject
-#    The atlas segmentation images. For performing label fusion the number of specified segmentations should be identical to the number of atlas image sets.
-# alpha : float
-#    Regularization term added to matrix Mx for calculating the inverse. Default = 0.1
-# beta : float
-#    Exponent for mapping intensity difference to the joint error. Default = 2.0
-# retain_label_posterior_images : bool
-#    Retain label posterior probability images. Requires atlas segmentations to be specified. Default = false
-# retain_atlas_voting_images : bool
-#    Retain atlas voting images. Default = false
-# constrain_nonnegative : bool
-#    Constrain solution to non-negative weights.
-# patch_radius : list
-#    Patch radius for similarity measures. Default: 2x2x2
-# patch_metric : enum
-#    Metric to be used in determining the most similar neighborhood patch. Options include Pearson's correlation (PC) and mean squares (MSQ). Default = PC (Pearson correlation).
-# search_radius : list
-#    Search radius for similarity measures. Default = 3x3x3. One can also specify an image where the value at the voxel specifies the isotropic search radius at that voxel.
-# exclusion_image_label : list
-#    Specify a label for the exclusion region.
-# exclusion_image : list
-#    Specify an exclusion region for the given label.
-# mask_image : file
-#    If a mask image is specified, fusion is only performed in the mask region.
-# out_label_fusion : file
-#    The output label fusion image.
-# out_intensity_fusion_name_format : str
-#    Optional intensity fusion image file name format. (e.g. "antsJointFusionIntensity_%d.nii.gz")
-# out_label_post_prob_name_format : str
-#    Optional label posterior probability image file name format.
-# out_atlas_voting_weight_name_format : str
-#    Optional atlas voting weight image file name format.
-# verbose : bool
-#    Verbose output.
-# num_threads : int
-#    Number of ITK threads to use
-# args : str
-#    Additional parameters to the command
-# environ : dict
-#    Environment variables
-#
-# Outputs
-# -------
-# out_label_fusion : file
-#    
-# out_intensity_fusion : outputmultiobject
-#    
-# out_label_post_prob : outputmultiobject
-#    
-# out_atlas_voting_weight : outputmultiobject
-#    
-#
 # Docs
 # ----
 # 
@@ -154,9 +94,14 @@ inputs:
   # for file types, where specifying the format also specifies the file that will be
   # passed to the field in the automatically generated unittests.
     atlas_segmentation_image: medimage/nifti-gz+list-of
+    # type=inputmultiobject|default=[]: The atlas segmentation images. For performing label fusion the number of specified segmentations should be identical to the number of atlas image sets.
     exclusion_image: medimage/nifti1+list-of
+    # type=list|default=[]: Specify an exclusion region for the given label.
     mask_image: generic/file
+    # type=file|default=<undefined>: If a mask image is specified, fusion is only performed in the mask region.
     out_label_fusion: medimage/nifti1
+    # type=file: 
+    # type=file|default=<undefined>: The output label fusion image.
   metadata:
   # dict[str, dict[str, any]] - additional metadata to set on any of the input fields (e.g. out_file: position: 1)
 outputs:
@@ -171,6 +116,8 @@ outputs:
   # for file types, where specifying the format also specifies the file that will be
   # passed to the field in the automatically generated unittests.
     out_label_fusion: medimage/nifti1
+    # type=file: 
+    # type=file|default=<undefined>: The output label fusion image.
   callables:
   # dict[str, str] - names of methods/callable classes defined in the adjacent `*_callables.py`
   # to set to the `callable` attribute of output fields
@@ -182,10 +129,80 @@ tests:
 - inputs:
   # dict[str, str] - values to provide to inputs fields in the task initialisation
   # (if not specified, will try to choose a sensible value)
-    out_label_fusion:
-    atlas_image: '[ ["rc1s1.nii","rc1s2.nii"] ]'
+    dimension:
+    # type=enum|default=3|allowed[2,3,4]: This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.
+    target_image:
+    # type=list|default=[]: The target image (or multimodal target images) assumed to be aligned to a common image domain.
+    atlas_image:
+    # type=list|default=[]: The atlas image (or multimodal atlas images) assumed to be aligned to a common image domain.
     atlas_segmentation_image:
+    # type=inputmultiobject|default=[]: The atlas segmentation images. For performing label fusion the number of specified segmentations should be identical to the number of atlas image sets.
+    alpha:
+    # type=float|default=0.1: Regularization term added to matrix Mx for calculating the inverse. Default = 0.1
+    beta:
+    # type=float|default=2.0: Exponent for mapping intensity difference to the joint error. Default = 2.0
+    retain_label_posterior_images:
+    # type=bool|default=False: Retain label posterior probability images. Requires atlas segmentations to be specified. Default = false
+    retain_atlas_voting_images:
+    # type=bool|default=False: Retain atlas voting images. Default = false
+    constrain_nonnegative:
+    # type=bool|default=False: Constrain solution to non-negative weights.
+    patch_radius:
+    # type=list|default=[]: Patch radius for similarity measures. Default: 2x2x2
+    patch_metric:
+    # type=enum|default='PC'|allowed['MSQ','PC']: Metric to be used in determining the most similar neighborhood patch. Options include Pearson's correlation (PC) and mean squares (MSQ). Default = PC (Pearson correlation).
+    search_radius:
+    # type=list|default=[3, 3, 3]: Search radius for similarity measures. Default = 3x3x3. One can also specify an image where the value at the voxel specifies the isotropic search radius at that voxel.
+    exclusion_image_label:
+    # type=list|default=[]: Specify a label for the exclusion region.
+    exclusion_image:
+    # type=list|default=[]: Specify an exclusion region for the given label.
+    mask_image:
+    # type=file|default=<undefined>: If a mask image is specified, fusion is only performed in the mask region.
+    out_label_fusion:
+    # type=file: 
+    # type=file|default=<undefined>: The output label fusion image.
+    out_intensity_fusion_name_format:
+    # type=str|default='': Optional intensity fusion image file name format. (e.g. "antsJointFusionIntensity_%d.nii.gz")
+    out_label_post_prob_name_format:
+    # type=str|default='antsJointFusionPosterior_%d.nii.gz': Optional label posterior probability image file name format.
+    out_atlas_voting_weight_name_format:
+    # type=str|default='antsJointFusionVotingWeight_%d.nii.gz': Optional atlas voting weight image file name format.
+    verbose:
+    # type=bool|default=False: Verbose output.
+    num_threads:
+    # type=int|default=1: Number of ITK threads to use
+    args:
+    # type=str|default='': Additional parameters to the command
+    environ:
+    # type=dict|default={}: Environment variables
+  imports:
+  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # consisting of 'module', 'name', and optionally 'alias' keys
+  expected_outputs:
+  # dict[str, str] - expected values for selected outputs, noting that tests will typically
+  # be terminated before they complete for time-saving reasons, and therefore
+  # these values will be ignored, when running in CI
+  timeout: 10
+  # int - the value to set for the timeout in the generated test, 
+  # after which the test will be considered to have been initialised 
+  # successfully. Set to 0 to disable the timeout (warning, this could
+  # lead to the unittests taking a very long time to complete)
+  xfail: true
+  # bool - whether the unittest is expected to fail or not. Set to false
+  # when you are satisfied with the edits you have made to this file
+- inputs:
+  # dict[str, str] - values to provide to inputs fields in the task initialisation
+  # (if not specified, will try to choose a sensible value)
+    out_label_fusion:
+    # type=file: 
+    # type=file|default=<undefined>: The output label fusion image.
+    atlas_image: '[ ["rc1s1.nii","rc1s2.nii"] ]'
+    # type=list|default=[]: The atlas image (or multimodal atlas images) assumed to be aligned to a common image domain.
+    atlas_segmentation_image:
+    # type=inputmultiobject|default=[]: The atlas segmentation images. For performing label fusion the number of specified segmentations should be identical to the number of atlas image sets.
     target_image: '["im1.nii"]'
+    # type=list|default=[]: The target image (or multimodal target images) assumed to be aligned to a common image domain.
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -205,6 +222,7 @@ tests:
   # dict[str, str] - values to provide to inputs fields in the task initialisation
   # (if not specified, will try to choose a sensible value)
     target_image: '[ ["im1.nii", "im2.nii"] ]'
+    # type=list|default=[]: The target image (or multimodal target images) assumed to be aligned to a common image domain.
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -224,7 +242,9 @@ tests:
   # dict[str, str] - values to provide to inputs fields in the task initialisation
   # (if not specified, will try to choose a sensible value)
     atlas_image: '[ ["rc1s1.nii","rc1s2.nii"],["rc2s1.nii","rc2s2.nii"] ]'
+    # type=list|default=[]: The atlas image (or multimodal atlas images) assumed to be aligned to a common image domain.
     atlas_segmentation_image:
+    # type=inputmultiobject|default=[]: The atlas segmentation images. For performing label fusion the number of specified segmentations should be identical to the number of atlas image sets.
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -244,10 +264,15 @@ tests:
   # dict[str, str] - values to provide to inputs fields in the task initialisation
   # (if not specified, will try to choose a sensible value)
     dimension: '3'
+    # type=enum|default=3|allowed[2,3,4]: This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.
     alpha: '0.5'
+    # type=float|default=0.1: Regularization term added to matrix Mx for calculating the inverse. Default = 0.1
     beta: '1.0'
+    # type=float|default=2.0: Exponent for mapping intensity difference to the joint error. Default = 2.0
     patch_radius: '[3,2,1]'
+    # type=list|default=[]: Patch radius for similarity measures. Default: 2x2x2
     search_radius: '[3]'
+    # type=list|default=[3, 3, 3]: Search radius for similarity measures. Default = 3x3x3. One can also specify an image where the value at the voxel specifies the isotropic search radius at that voxel.
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -267,9 +292,13 @@ tests:
   # dict[str, str] - values to provide to inputs fields in the task initialisation
   # (if not specified, will try to choose a sensible value)
     search_radius: '["mask.nii"]'
+    # type=list|default=[3, 3, 3]: Search radius for similarity measures. Default = 3x3x3. One can also specify an image where the value at the voxel specifies the isotropic search radius at that voxel.
     verbose: 'True'
+    # type=bool|default=False: Verbose output.
     exclusion_image:
+    # type=list|default=[]: Specify an exclusion region for the given label.
     exclusion_image_label: '["1","2"]'
+    # type=list|default=[]: Specify a label for the exclusion region.
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -289,9 +318,14 @@ tests:
   # dict[str, str] - values to provide to inputs fields in the task initialisation
   # (if not specified, will try to choose a sensible value)
     out_label_fusion:
+    # type=file: 
+    # type=file|default=<undefined>: The output label fusion image.
     out_intensity_fusion_name_format: '"ants_joint_fusion_intensity_%d.nii.gz"'
+    # type=str|default='': Optional intensity fusion image file name format. (e.g. "antsJointFusionIntensity_%d.nii.gz")
     out_label_post_prob_name_format: '"ants_joint_fusion_posterior_%d.nii.gz"'
+    # type=str|default='antsJointFusionPosterior_%d.nii.gz': Optional label posterior probability image file name format.
     out_atlas_voting_weight_name_format: '"ants_joint_fusion_voting_weight_%d.nii.gz"'
+    # type=str|default='antsJointFusionVotingWeight_%d.nii.gz': Optional atlas voting weight image file name format.
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -315,9 +349,14 @@ doctests:
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
     out_label_fusion:
+    # type=file: 
+    # type=file|default=<undefined>: The output label fusion image.
     atlas_image: '[ ["rc1s1.nii","rc1s2.nii"] ]'
+    # type=list|default=[]: The atlas image (or multimodal atlas images) assumed to be aligned to a common image domain.
     atlas_segmentation_image:
+    # type=inputmultiobject|default=[]: The atlas segmentation images. For performing label fusion the number of specified segmentations should be identical to the number of atlas image sets.
     target_image: '["im1.nii"]'
+    # type=list|default=[]: The target image (or multimodal target images) assumed to be aligned to a common image domain.
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -330,6 +369,7 @@ doctests:
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
     target_image: '[ ["im1.nii", "im2.nii"] ]'
+    # type=list|default=[]: The target image (or multimodal target images) assumed to be aligned to a common image domain.
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -342,7 +382,9 @@ doctests:
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
     atlas_image: '[ ["rc1s1.nii","rc1s2.nii"],["rc2s1.nii","rc2s2.nii"] ]'
+    # type=list|default=[]: The atlas image (or multimodal atlas images) assumed to be aligned to a common image domain.
     atlas_segmentation_image:
+    # type=inputmultiobject|default=[]: The atlas segmentation images. For performing label fusion the number of specified segmentations should be identical to the number of atlas image sets.
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -355,10 +397,15 @@ doctests:
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
     dimension: '3'
+    # type=enum|default=3|allowed[2,3,4]: This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.
     alpha: '0.5'
+    # type=float|default=0.1: Regularization term added to matrix Mx for calculating the inverse. Default = 0.1
     beta: '1.0'
+    # type=float|default=2.0: Exponent for mapping intensity difference to the joint error. Default = 2.0
     patch_radius: '[3,2,1]'
+    # type=list|default=[]: Patch radius for similarity measures. Default: 2x2x2
     search_radius: '[3]'
+    # type=list|default=[3, 3, 3]: Search radius for similarity measures. Default = 3x3x3. One can also specify an image where the value at the voxel specifies the isotropic search radius at that voxel.
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -371,9 +418,13 @@ doctests:
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
     search_radius: '["mask.nii"]'
+    # type=list|default=[3, 3, 3]: Search radius for similarity measures. Default = 3x3x3. One can also specify an image where the value at the voxel specifies the isotropic search radius at that voxel.
     verbose: 'True'
+    # type=bool|default=False: Verbose output.
     exclusion_image:
+    # type=list|default=[]: Specify an exclusion region for the given label.
     exclusion_image_label: '["1","2"]'
+    # type=list|default=[]: Specify a label for the exclusion region.
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -386,9 +437,14 @@ doctests:
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
     out_label_fusion:
+    # type=file: 
+    # type=file|default=<undefined>: The output label fusion image.
     out_intensity_fusion_name_format: '"ants_joint_fusion_intensity_%d.nii.gz"'
+    # type=str|default='': Optional intensity fusion image file name format. (e.g. "antsJointFusionIntensity_%d.nii.gz")
     out_label_post_prob_name_format: '"ants_joint_fusion_posterior_%d.nii.gz"'
+    # type=str|default='antsJointFusionPosterior_%d.nii.gz': Optional label posterior probability image file name format.
     out_atlas_voting_weight_name_format: '"ants_joint_fusion_voting_weight_%d.nii.gz"'
+    # type=str|default='antsJointFusionVotingWeight_%d.nii.gz': Optional atlas voting weight image file name format.
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
