@@ -21,7 +21,7 @@ on:
 
 jobs:
 
-  auto-gen:
+  nipype-convert:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -43,6 +43,7 @@ jobs:
         path: pydra/tasks/ants/auto
 
   devcheck:
+    needs: [nipype-convert]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -80,6 +81,7 @@ jobs:
         python -c "import pydra as m; print(f'{m.__name__} {m.__version__} @ {m.__file__}')"
 
   test:
+    needs: [nipype-convert]
     runs-on: ubuntu-latest
     strategy:
       matrix:
