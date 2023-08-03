@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "pydra-tasks-ants"
 description = "Pydra tasks package for ants"
-readme = "README.md"
+readme = "README.rst"
 requires-python = ">=3.8"
 dependencies = [
     "pydra >=0.22",
@@ -49,6 +49,7 @@ test = [
     "pytest-rerunfailures",
     "codecov",
     "fileformats-extras",
+    "fileformats-datascience-extras",
     "fileformats-medimage-extras",
 ]
 
